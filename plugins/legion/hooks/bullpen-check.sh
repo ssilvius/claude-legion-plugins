@@ -13,9 +13,13 @@ REPO=$(basename "$CWD")
 # Check board for unread posts
 BOARD_COUNT=$(legion bullpen --count --repo "$REPO" 2>/dev/null)
 if [ -n "$BOARD_COUNT" ]; then
-  jq -n --arg reason "[Legion] ${BOARD_COUNT}. Run legion bullpen --repo ${REPO} to read them." '{
-    "decision": "allow",
-    "reason": $reason
+  jq -n --arg ctx "[Legion] ${BOARD_COUNT}. Run legion bullpen --repo ${REPO} to read them." '{
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "allow",
+      "permissionDecisionReason": "legion bullpen notification",
+      "additionalContext": $ctx
+    }
   }'
 else
   exit 0

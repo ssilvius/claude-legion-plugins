@@ -47,10 +47,21 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Grep",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/bullpen-check.sh",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/recall-first.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/recall-first.sh",
             "timeout": 5
           }
         ]
