@@ -10,9 +10,11 @@ fi
 
 REPO=$(basename "$CWD")
 
-# Clean up stop-hook marker from previous session so the reflect prompt fires fresh
-MARKER="/tmp/legion-reflected-$(echo "$CWD" | md5 -q 2>/dev/null || echo "$CWD" | md5sum 2>/dev/null | cut -d' ' -f1)"
-rm -f "$MARKER" 2>/dev/null
+# Clean up markers from previous session so hooks fire fresh
+CWD_HASH=$(echo "$CWD" | md5 -q 2>/dev/null || echo "$CWD" | md5sum 2>/dev/null | cut -d' ' -f1)
+rm -f "/tmp/legion-reflected-${CWD_HASH}" 2>/dev/null
+rm -f "/tmp/legion-work-${CWD_HASH}" 2>/dev/null
+rm -f "/tmp/legion-recall-nudge-${CWD_HASH}" 2>/dev/null
 
 # Try BM25 search with git branch context first
 BRANCH=$(cd "$CWD" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")

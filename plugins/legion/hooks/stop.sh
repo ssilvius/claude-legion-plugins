@@ -1,6 +1,6 @@
 #!/bin/bash
 # Legion Stop hook: prompt the agent to reflect before closing
-# Uses a CWD-based temp marker to prevent re-fires within the same session
+# Mutex: only fires once per session AND only if the session did real work.
 INPUT=$(cat)
 CWD=$(echo "$INPUT" | jq -r '.cwd // empty')
 
@@ -9,10 +9,17 @@ if [ -z "$CWD" ]; then
 fi
 
 REPO=$(basename "$CWD")
+CWD_HASH=$(echo "$CWD" | md5 -q 2>/dev/null || echo "$CWD" | md5sum 2>/dev/null | cut -d' ' -f1)
 
-# Prevent re-fires: marker is based on CWD hash so each agent session gets one prompt
-MARKER="/tmp/legion-reflected-$(echo "$CWD" | md5 -q 2>/dev/null || echo "$CWD" | md5sum 2>/dev/null | cut -d' ' -f1)"
+# Prevent re-fires: one reflect prompt per session
+MARKER="/tmp/legion-reflected-${CWD_HASH}"
 if [ -f "$MARKER" ]; then
+  exit 0
+fi
+
+# Mutex: skip if session had no real work (no work marker from recall-first or other hooks)
+WORK_MARKER="/tmp/legion-work-${CWD_HASH}"
+if [ ! -f "$WORK_MARKER" ]; then
   exit 0
 fi
 
