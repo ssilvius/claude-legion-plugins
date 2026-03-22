@@ -15,6 +15,7 @@ CWD_HASH=$(echo "$CWD" | md5 -q 2>/dev/null || echo "$CWD" | md5sum 2>/dev/null 
 rm -f "/tmp/legion-reflected-${CWD_HASH}" 2>/dev/null
 rm -f "/tmp/legion-work-${CWD_HASH}" 2>/dev/null
 rm -f "/tmp/legion-recall-nudge-${CWD_HASH}" 2>/dev/null
+rm -f "/tmp/legion-channel-${REPO}" 2>/dev/null
 
 # Try BM25 search with git branch context first
 BRANCH=$(cd "$CWD" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
@@ -30,7 +31,7 @@ if [ -z "$OUTPUT" ]; then
 fi
 
 # Static legion reminders
-LEGION_HELP="[Legion] consult --context <problem> to search all agents | signal --to <agent> --verb question to ask directly | boost --id <id> when a reflection helps"
+LEGION_HELP="[Legion] No orientation theater. You have context -- read it, act on it, pick up where you left off. consult --context <problem> to search all agents | signal --to <agent> --verb question to ask directly | boost --id <id> when a reflection helps"
 
 # Surface cross-repo highlights (board posts, high-value reflections, chains)
 SURFACE=$(legion surface --repo "$REPO" 2>/dev/null)
