@@ -20,6 +20,18 @@ rm -f "/tmp/legion-channel-${REPO}" 2>/dev/null
 # Try BM25 search with git branch context first
 BRANCH=$(cd "$CWD" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
 
+# Append non-empty text to OUTPUT, separated by double newlines
+append() {
+  local text="$1"
+  if [ -n "$text" ]; then
+    if [ -n "$OUTPUT" ]; then
+      OUTPUT="$OUTPUT"$'\n\n'"$text"
+    else
+      OUTPUT="$text"
+    fi
+  fi
+}
+
 OUTPUT=""
 if [ -n "$BRANCH" ] && [ "$BRANCH" != "main" ] && [ "$BRANCH" != "master" ]; then
   OUTPUT=$(legion recall --repo "$REPO" --context "$BRANCH" 2>/dev/null)
@@ -34,14 +46,10 @@ fi
 LEGION_HELP="[Legion] No orientation theater. You have context -- read it, act on it, pick up where you left off. consult --context <problem> to search all agents | signal --to <agent> --verb question to ask directly | boost --id <id> when a reflection helps"
 
 # Surface cross-repo highlights (board posts, high-value reflections, chains)
-SURFACE=$(legion surface --repo "$REPO" 2>/dev/null)
-if [ -n "$SURFACE" ]; then
-  if [ -n "$OUTPUT" ]; then
-    OUTPUT="$OUTPUT"$'\n\n'"$SURFACE"
-  else
-    OUTPUT="$SURFACE"
-  fi
-fi
+append "$(legion surface --repo "$REPO" 2>/dev/null)"
+
+# Agent work status (your tasks, team needs, what changed)
+append "$(legion status --repo "$REPO" 2>/dev/null)"
 
 if [ -n "$OUTPUT" ]; then
   OUTPUT="${OUTPUT}"$'\n\n'"${LEGION_HELP}"
