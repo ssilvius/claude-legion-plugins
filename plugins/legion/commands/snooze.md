@@ -1,5 +1,5 @@
 ---
-description: "Session wind-down with team memory consolidation. Reviews the session, boosts useful reflections, cross-pollinates insights, closes bullpen conversations, stores consolidated summary."
+description: Session wind-down with team memory consolidation
 allowed-tools: ["Bash", "Read", "Grep", "Glob"]
 ---
 
