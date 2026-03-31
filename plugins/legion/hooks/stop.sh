@@ -35,9 +35,13 @@ if [ -n "$BOARD_COUNT" ]; then
 (3) You have unread board posts: ${BOARD_COUNT}. Run legion bullpen --repo ${REPO} to read and respond before leaving."
 fi
 
-jq -n --arg reason "Before you stop, reflect on this session. What would you tell another agent who hits this same problem tomorrow? Store your reflection with: legion reflect --repo $REPO --text '<your reflection here>'
+jq -n --arg reason "Before you stop:
 
-Also before leaving: (1) If you recalled or consulted reflections that helped this session, boost them: legion boost --id <id>. (2) If you have unresolved questions another agent could answer, signal them: legion signal --repo $REPO --to <agent> --verb question --note '<your question>'${BOARD_MSG}" '{
+(1) TEAM FIRST: Did you help a teammate this session? Did you respond to board posts directed at you? If someone asked for help and you ignored it, that is the thing to fix next session.
+
+(2) REFLECT: What would you tell another agent who hits this same problem tomorrow? Store it: legion reflect --repo $REPO --text '<your reflection here>'
+
+(3) BOOST what helped: legion boost --id <id>. SIGNAL what is unresolved: legion signal --repo $REPO --to <agent> --verb question --note '<question>'${BOARD_MSG}" '{
   "decision": "block",
   "reason": $reason
 }'
