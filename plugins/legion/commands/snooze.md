@@ -1,5 +1,6 @@
 ---
 description: Session wind-down with team memory consolidation
+argument-hint: ""
 allowed-tools: ["Bash", "Read", "Grep", "Glob"]
 ---
 
