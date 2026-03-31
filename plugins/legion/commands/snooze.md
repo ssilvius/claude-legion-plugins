@@ -1,7 +1,7 @@
 ---
 description: Session wind-down with team memory consolidation
 argument-hint: ""
-allowed-tools: ["Bash", "Read", "Grep", "Glob"]
+allowed-tools: ["Bash"]
 ---
 
 # /snooze -- Team Memory Consolidation
